@@ -14,8 +14,6 @@ import HyperABI from '../utils/Hyperswap.json';
 import { alertService } from '../services';
 import styles from '../styles/Home.module.css';
 import Image from "next/image";
-import ethIcon from "cryptocurrency-icons/svg/color/eth.svg";
-import algoIcon from "cryptocurrency-icons/svg/color/algo.svg";
 
 
 export default function Swap() {
@@ -304,13 +302,13 @@ export default function Swap() {
             </div>
 
             <div className={`modal ${modalToken} cursor-pointer ${styles.modalSelf}`} id="my-modal-5">
-                <div className="modal-box">
+                <div className="modal-box bg-base-100">
                     <h3 className="text-lg font-bold">Select Token</h3>
                     <div className="divider"></div>
                     <div className="flex flex-col">
 
                         {tokenlist.map((item, key) => (
-                            <div className="flex flex-row cursor-pointer hover:bg-primary-focus rounded-2xl p-1" key={key} onClick={() => selectToken0ChangeHandle(key)}>
+                            <div className="flex flex-row cursor-pointer hover:bg-success rounded-2xl p-1" key={key} onClick={() => selectToken0ChangeHandle(key)}>
                                 <div>
                                     <Image src={item.path} width={25} height={25} />
                                 </div>
@@ -344,8 +342,7 @@ export default function Swap() {
             </div>
 
             <div className="w-60 m-auto mt-40">
-                <select className="select select-primary  w-full max-w-xs">
-                    <option disabled selected>Select a Bridge</option>
+                <select className="select select-primary w-full max-w-xs">
                     <option>Glitter</option>
                     <option>Wormhole</option>
                 </select>
@@ -374,13 +371,16 @@ export default function Swap() {
                             </div>
                             <div className="w-1/4">
 
-                                {token0 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
-                                    <div className="m-1"><Image src={tokensConfig[bridgeConfig[currentBridge].value][token0].path} width={20} height={20}></Image></div>
-                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token0].name}</div>
-                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
-                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
-                                    <div className="ml-3 mt-1">select</div>
-                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
+                                {token0 != null ? (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl  cursor-pointer" onClick={myModal5ClickHandle}>
+                                    <div className="flex"
+                                    ><Image src={tokensConfig[bridgeConfig[currentBridge].value][token0].path} width={20} height={20}></Image>
+                                    </div>
+                                    <div className="flex-auto text-center mx-1">{tokensConfig[bridgeConfig[currentBridge].value][token0].name}</div>
+                                    <div className="flex"><FaAngleDown size="1rem" />
+                                    </div>
+                                </div>) : (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
+                                    <div className="flex-auto text-center">select</div>
+                                    <div className="flex"><FaAngleDown size="1rem" /></div>
                                 </div>)}
 
                             </div>
@@ -399,16 +399,16 @@ export default function Swap() {
                         </div>
                         <div className="flex flex-row p-2 gap-x-32">
                             <div className="w-1/2">
-                                <input type="text" placeholder="0.0" onChange={token1InputHandle} onFocus={token1InputHandle} value={token1Input} className="text-base input input-ghost w-full max-w-xs focus:outline-0 focus:bg-inherit" />
+                                <input type="text" placeholder="0.0" onChange={token1InputHandle} onFocus={token1InputHandle} value={token1Input} className="text-primary input input-ghost w-full max-w-xs focus:outline-0 focus:bg-primary" />
                             </div>
                             <div className="w-1/4">
-                                {token1 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
-                                    <div className="m-1"><Image src={tokensConfig[bridgeConfig[currentBridge].value][token1].path} width={20} height={20}></Image></div>
-                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token1].name}</div>
-                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
-                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2  cursor-pointer" onClick={myModal6ClickHandle}>
-                                    <div className="ml-3 mt-1">select</div>
-                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
+                                {token1 != null ? (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
+                                    <div className="flex"><Image src={tokensConfig[bridgeConfig[currentBridge].value][token1].path} width={20} height={20}></Image></div>
+                                    <div className="flex-auto text-center mx-1">{tokensConfig[bridgeConfig[currentBridge].value][token1].name}</div>
+                                    <div className="flex"><FaAngleDown size="1rem" /></div>
+                                </div>) : (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl px-2  cursor-pointer" onClick={myModal6ClickHandle}>
+                                    <div className="flex-auto text-center">select</div>
+                                    <div className="flex"><FaAngleDown size="1rem" /></div>
                                 </div>)}
 
                             </div>
