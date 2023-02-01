@@ -1,5 +1,19 @@
 # Algo-bridge-aggregator
 
+SDK consist of:
+
+- get token balance
+- attested
+- transfer
+- get result
+
+Flowchart:
+
+- select bridge
+- select network(use native token)
+- attested
+- transfer
+
 ## Tree
 
 ## Overview

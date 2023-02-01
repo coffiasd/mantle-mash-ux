@@ -10,8 +10,6 @@ import tokensConfig from "../utils/token_config.json";
 import { useEffect, useState } from "react";
 import { FetchPrice } from "../utils/common";
 import HyperABI from '../utils/Hyperswap.json';
-//wagmi hooks
-import { useAccount, useNetwork, erc20ABI, useSwitchNetwork } from 'wagmi'
 //alert
 import { alertService } from '../services';
 import styles from '../styles/Home.module.css';
@@ -21,8 +19,6 @@ import algoIcon from "cryptocurrency-icons/svg/color/algo.svg";
 
 
 export default function Swap() {
-
-    const { switchNetwork } = useSwitchNetwork();
 
     const [rpc, setRpc] = useState(bridgeConfig[0].rpc);
     const [tokenlist, setTokenlist] = useState(tokensConfig[bridgeConfig[0].value]);
@@ -75,8 +71,6 @@ export default function Swap() {
     const hyperProvider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = hyperProvider.getSigner();
     const connectedContract = new ethers.Contract(hypercontractaddress, HyperABI.abi, signer);
-    const { isConnected } = useAccount();
-    const { chain } = useNetwork();
 
     var myInterval = null;
 
@@ -119,37 +113,11 @@ export default function Swap() {
 
     //get balance
     async function getERC20Balance(address) {
-        let erc20 = new ethers.Contract(address, erc20ABI, provider);
-        let balance = await erc20.balanceOf(interchainAccount);
-        return Number(balance._hex);
+        return Number(0);
     }
 
     //get allowance
     async function getAllowance() {
-        if (token0 == null) {
-            return
-        }
-        //token0 address
-        let chainId = bridgeConfig[currentBridge].value;
-        let token0Info = tokensConfig[chainId][token0];
-        let erc20 = new ethers.Contract(token0Info.address, erc20ABI, provider);
-        console.log("allowance================", bridgeConfig[currentBridge].value, token0Info.address);
-        let allowance = await erc20.allowance(interchainAccount, uniswapRouterAddress);
-        console.log("================allowance2===============", Number(allowance._hex) / Math.pow(10, token0Info.decimals));
-        setAllowance(Number(allowance._hex) / Math.pow(10, token0Info.decimals));
-
-        console.log("myInterval:", myInterval);
-
-        if (Number(allowance._hex) / Math.pow(10, token0Info.decimals) >= token0Input) {
-            setLoading("");
-            console.log("myInterval:", myInterval);
-            clearInterval(myInterval);
-        }
-
-        // setTimeout(() => {
-        //     console.log("allowance timeout");
-        //     setAllowance(1);
-        // }, 4000);
 
     }
 
@@ -202,60 +170,11 @@ export default function Swap() {
 
     // approve
     async function approve() {
-        // setLoading("loading");
-        // myInterval = setInterval(() => {
-        //     getAllowance();
-        // }, 2000);
-        // console.log(myInterval);
-        console.log("==================approve================");
-        if (!isConnected) {
-            alertService.info("connect wallet!!", options);
-            return;
-        }
-        if (chain.id != 97) {
-            alertService.info("use bsc testnet!!", options);
-            switchNetwork(97);
-            return;
-        }
-        setLoading("loading");
-        // setTimeout(() => {
-        //     setLoading("");
-        // }, 12000);
-        const m = await connectedContract.ApproveSpecifyToken(bridgeConfig[currentBridge].value, tokensConfig[bridgeConfig[currentBridge].value][token0].address, ethers.utils.parseEther(token0Input), {
-            gasLimit: ethers.utils.hexlify(0x100000), //100000
-        });
-        console.log(m);
-        // setLoading("");
-        myInterval = setInterval(() => {
-            getAllowance();
-        }, 2000);
-        console.log(myInterval);
+
     }
 
     async function swap() {
-        console.log("=================swap===================");
-        if (!isConnected) {
-            alertService.info("connect wallet!!", options);
-            return;
-        }
 
-        if (chain.id != 97) {
-            alertService.info("use bsc testnet!!", options);
-            switchNetwork(97);
-            return;
-        }
-        setLoading("loading");
-        setTimeout(() => {
-            setLoading("");
-        }, 12000);
-        const m = await connectedContract.HyperlaneSwap(bridgeConfig[currentBridge].value, [tokensConfig[bridgeConfig[currentBridge].value][token0].address, tokensConfig[bridgeConfig[currentBridge].value][token1].address], fee, ethers.utils.parseEther(token0Input), 0, {
-            gasLimit: ethers.utils.hexlify(0x100000), //100000
-        });
-        setToken0Input(0);
-        setToken1Input(0);
-        console.log(m);
-        setLoading("");
-        setModal("modal-open");
     }
 
     /// control modal
@@ -316,7 +235,6 @@ export default function Swap() {
     //switch network
     const networkChange = (netKey) => {
         myModal4ClickHandle();
-        // let netKey = e.target.value;
         let ChainId = bridgeConfig[netKey].value;
         setRpc(bridgeConfig[netKey].rpc);
         console.log("=============switch network===========", bridgeConfig[netKey].rpc);
@@ -331,27 +249,18 @@ export default function Swap() {
     }
 
     useEffect(() => {
-        console.log("================counting balance=================");
 
         const fetchToken0Balance = async () => {
-            let token0Info = tokensConfig[bridgeConfig[currentBridge].value][token0];
-            let token0Balance = await getERC20Balance(token0Info.address);
-            console.log("fetch balance token0:", ethers.utils.formatUnits(String(token0Balance), token0Info.decimals));
-            setToken0Balance(ethers.utils.formatUnits(String(token0Balance), token0Info.decimals));
+
         }
 
         const fetchToken1Balance = async () => {
-            let token1Info = tokensConfig[bridgeConfig[currentBridge].value][token1];
-            let token1Balance = await getERC20Balance(token1Info.address);
-            console.log("fetch balance token1:", ethers.utils.formatUnits(String(token1Balance), token1Info.decimals));
-            setToken1Balance(ethers.utils.formatUnits(String(token1Balance), token1Info.decimals));
+
         }
 
         if (token0 != null) {
-            fetchToken0Balance();
         }
         if (token1 != null) {
-            fetchToken1Balance();
         }
 
         //caculate token ex rate.
@@ -401,14 +310,11 @@ export default function Swap() {
                     <div className="flex flex-col">
 
                         {tokenlist.map((item, key) => (
-                            <div className="flex flex-row h-10 cursor-pointer hover:bg-primary-focus rounded-2xl" key={key} onClick={() => selectToken0ChangeHandle(key)}>
-                                <div className="w-1/12 align-middle mt-1">
+                            <div className="flex flex-row cursor-pointer hover:bg-primary-focus rounded-2xl p-1" key={key} onClick={() => selectToken0ChangeHandle(key)}>
+                                <div>
                                     <Image src={item.path} width={25} height={25} />
                                 </div>
-                                <div className="">
-                                    <div class="text-xs leading-5 font-medium text-black group-hover:text-slate-50">FTM</div>
-                                    <div class="text-[0.625rem] leading-[1.2] font-normal text-slate-500 group-hover:text-blue-100">Fantom</div>
-                                </div>
+                                <div className="ml-3 text-base">{item.name}</div>
                             </div>
                         ))}
                     </div>
@@ -417,7 +323,7 @@ export default function Swap() {
 
             <div className={`modal ${modalToken1} cursor-pointer ${styles.modalSelf}`} id="my-modal-6">
                 <div className="modal-box">
-                    <h3 className="text-lg font-bold">Select Token</h3>
+                    <h3 className="text-lg font-bold">Select Network</h3>
                     <div className="divider"></div>
                     <div className="flex flex-col">
                         {tokenlist.map((item, key) => (
@@ -426,7 +332,7 @@ export default function Swap() {
                                     <Image src={item.path} width={25} height={25} />
                                 </div>
                                 <div className="w-9/12 mb-4">
-                                    <div>{item.symbol}</div>
+                                    <div>{item.name}</div>
                                 </div>
                                 <div className="w-2/12">
                                     -
@@ -468,13 +374,13 @@ export default function Swap() {
                             </div>
                             <div className="w-1/4">
 
-                                {token0 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl p-1 cursor-pointer" onClick={myModal5ClickHandle}>
+                                {token0 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
                                     <div className="m-1"><Image src={tokensConfig[bridgeConfig[currentBridge].value][token0].path} width={20} height={20}></Image></div>
-                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token0].symbol}</div>
-                                    <div className="ml-1 mt-1"><FaAngleDown size="1.3rem" /></div>
-                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl p-1 cursor-pointer" onClick={myModal5ClickHandle}>
-                                    <div className="ml-1 mt-1">Select</div>
-                                    <div className="ml-1 mt-1"><FaAngleDown size="1.3rem" /></div>
+                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token0].name}</div>
+                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
+                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
+                                    <div className="ml-3 mt-1">select</div>
+                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
                                 </div>)}
 
                             </div>
@@ -493,16 +399,16 @@ export default function Swap() {
                         </div>
                         <div className="flex flex-row p-2 gap-x-32">
                             <div className="w-1/2">
-                                <input type="text" placeholder="0.0" onChange={token1InputHandle} onFocus={token1InputHandle} value={token1Input} className="input input-ghost w-full max-w-xs focus:outline-0 focus:bg-inherit" />
+                                <input type="text" placeholder="0.0" onChange={token1InputHandle} onFocus={token1InputHandle} value={token1Input} className="text-base input input-ghost w-full max-w-xs focus:outline-0 focus:bg-inherit" />
                             </div>
                             <div className="w-1/4">
-                                {token1 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl p-1 cursor-pointer" onClick={myModal5ClickHandle}>
+                                {token1 != null ? (<div className="w-32 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2 cursor-pointer" onClick={myModal5ClickHandle}>
                                     <div className="m-1"><Image src={tokensConfig[bridgeConfig[currentBridge].value][token1].path} width={20} height={20}></Image></div>
-                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token1].symbol}</div>
-                                    <div className="ml-1 mt-1"><FaAngleDown size="1.3rem" /></div>
-                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl p-1 cursor-pointer" onClick={myModal6ClickHandle}>
-                                    <div className="ml-1 mt-1">Select</div>
-                                    <div className="ml-1 mt-1"><FaAngleDown size="1.3rem" /></div>
+                                    <div className="ml-1 mt-1">{tokensConfig[bridgeConfig[currentBridge].value][token1].name}</div>
+                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
+                                </div>) : (<div className="w-28 h-10 mx-auto flex flex-row border-solid border-2 rounded-2xl px-2  cursor-pointer" onClick={myModal6ClickHandle}>
+                                    <div className="ml-3 mt-1">select</div>
+                                    <div className="ml-3 mt-1"><FaAngleDown size="1rem" /></div>
                                 </div>)}
 
                             </div>
