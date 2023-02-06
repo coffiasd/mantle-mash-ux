@@ -81,16 +81,7 @@ export default function Header() {
             </div>
 
             <div className="navbar-end">
-                {account ?
-                    (<div className="dropdown dropdown-end">
-                        <label tabIndex={0} className="btn btn-ghost rounded-btn"><Image src={algoSmallIcon} width={20} height={20} />&nbsp;&nbsp;{hideAddress(account)}<FaAngleDown size="1rem" className="ml-2" /></label>
-                        <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
-                            <li><button className="btn" onClick={disconnect}>Disconnect</button></li>
-                        </ul>
-                    </div>)
-                    :
-                    <button className="btn btn-primary btn-sm bg-base ml-3 normal-case" onClick={connectWallet}>connect wallet</button>
-                }
+
             </div>
         </div >
     )

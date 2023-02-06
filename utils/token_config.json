@@ -1,16 +1,16 @@
 [
   {
-    "decimals": 18,
+    "decimals": 6,
     "symbol": "ALGO",
     "name": "Algo",
     "path": "/network/algorand.svg",
-    "wallet":"myalgo.png"
+    "wallet": "myalgo.png"
   },
   {
-    "decimals": 6,
-    "symbol": "SOL",
-    "name": "Solana",
-    "path": "/network/solana.svg",
-    "wallet":"solflare.svg"
+    "decimals": 18,
+    "symbol": "ETH",
+    "name": "Ether",
+    "path": "/network/eth.svg",
+    "wallet": "metamask.svg"
   }
 ]

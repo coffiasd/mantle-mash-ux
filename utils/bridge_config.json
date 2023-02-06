@@ -1,16 +1,14 @@
 [
   {
-    "rpc": "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
     "value": 1,
-    "label": "glitter",
-    "fee": 3000,
-    "path": "/network/glitter.png"
+    "name": "wormhole",
+    "icon": "/network/wormhole.png",
+    "isReady": true
   },
   {
-    "rpc": "https://rpc-mumbai.maticvigil.com",
     "value": 2,
-    "label": "wormhole",
-    "fee": 500,
-    "path": "/network/wormhole.png"
+    "name": "glitter(comming)",
+    "icon": "/network/glitter.png",
+    "isReady": false
   }
 ]
