@@ -9,11 +9,7 @@ import {
   hexToUint8Array,
   redeemOnEth,
   CONTRACTS,
-  coalesceChainName,
-  getEmitterAddressEth,
-  transferFromEthNative,
-  parseSequenceFromLogEth,
-  redeemOnAlgorand
+  coalesceChainName
 } from "@certusone/wormhole-sdk";
 
 import { signSendAndConfirmAlgorand } from './utils/signSendAndConfirmAlgorand';
@@ -24,11 +20,6 @@ const getTokenBridgeAddressForChain = (chainId) =>
   CONTRACTS["TESTNET"][
     coalesceChainName(chainId)
   ].token_bridge || "";
-
-const getBridgeAddressForChain = (chainId) =>
-  CONTRACTS["TESTNET"][
-    coalesceChainName(chainId)
-  ].core || "";
 
 async function fetchSignedVAA(
   chainId,
@@ -98,28 +89,12 @@ export async function algoBalance(addrs) {
   return balance;
 }
 
-export async function algoAssetBalance(addrs, index) {
+export async function algoRedeemHandle(signedVAA) {
   const algodClient = new algosdk.Algodv2(
     "",
     "https://testnet-api.algonode.cloud",
     ""
   );
-  // const info = await algodClient.accountInformation(addrs).do();
-  const info = await algodClient.accountAssetInformation(addrs, 86782447).do();
-  const balance = info["asset-holding"].amount / 10 ** 8;
-  return balance;
-}
-
-export async function algoRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading) {
-  const algodClient = new algosdk.Algodv2(
-    "",
-    "https://testnet-api.algonode.cloud",
-    ""
-  );
-
-  const ALGORAND_TOKEN_BRIDGE_ID = BigInt(86525641);
-  const ALGORAND_BRIDGE_ID = BigInt(86525623);
-
   const txs = await redeemOnAlgorand(
     algodClient,
     ALGORAND_TOKEN_BRIDGE_ID,
@@ -127,11 +102,8 @@ export async function algoRedeemHandle(signedVAA, token, sender, receiver, alert
     signedVAA,
     senderAddr
   );
-
   const result = await signSendAndConfirmAlgorand(algodClient, txs);
-  alertService.info("redeem success");
-  setLoading("");
-  setStage(0);
+  console.log(result);
 }
 
 export async function evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading) {
@@ -151,25 +123,20 @@ export async function evmRedeemHandle(signedVAA, token, sender, receiver, alertS
   console.log(receipt);
 }
 
-export async function evmTransferHandle(setSignedVAAHex, amount, token, sender, receiver, alertService, setStage, setLoading) {
-  const baseAmountParsed = parseUnits(amount, token.decimals);
-  const feeParsed = parseUnits("0", token.decimals);
+export async function evmTransferHandle() {
+  const baseAmountParsed = parseUnits(amount, decimals);
+  const feeParsed = parseUnits(relayerFee || "0", decimals);
   const transferAmountParsed = baseAmountParsed.add(feeParsed);
-  const recipientChain = 8;
-  const chainId = 2;
-
-  const Provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = Provider.getSigner();
-
-  const receipt = await transferFromEthNative(
+  const receipt = await transferFromEth(
     getTokenBridgeAddressForChain(chainId),
     signer,
+    tokenAddress,
     transferAmountParsed,
     recipientChain,
-    hexToUint8Array("6a566fd052ef7275e2c0130f01a8c931e4d40f09565b1f8a42b4162ec776232f"),
+    recipientAddress,
     feeParsed,
     {}
-  )
+  );
 
   const sequence = parseSequenceFromLogEth(
     receipt,
@@ -178,29 +145,20 @@ export async function evmTransferHandle(setSignedVAAHex, amount, token, sender, 
   const emitterAddress = getEmitterAddressEth(
     getTokenBridgeAddressForChain(chainId)
   );
-  const SignedVAAHex = await fetchSignedVAA(
+  await fetchSignedVAA(
     chainId,
     emitterAddress,
     sequence,
   );
-
-  setSignedVAAHex(SignedVAAHex);
-  setStage(2);
-  setLoading("");
-  alertService.info("transfer success");
 }
 
 export async function transferHandle(setSignedVAA, swapAmount, token, sender, receiver, alertService, setStage, setLoading) {
-  alertService.info("starting transfer...");
-  console.log(token.name);
   setLoading("loading");
-
   switch (token.name) {
     case "Algo":
       algoTransferHandle(setSignedVAA, swapAmount, token, sender, receiver, alertService, setStage, setLoading);
       break;
     case "Ether":
-      evmTransferHandle(setSignedVAA, swapAmount, token, sender, receiver, alertService, setStage, setLoading);
       break;
     default:
       break;
@@ -208,12 +166,9 @@ export async function transferHandle(setSignedVAA, swapAmount, token, sender, re
 }
 
 export async function redeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading) {
-  alertService.info("starting redeem...");
   setLoading("loading");
-
   switch (token.name) {
     case "Algo":
-      algoRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading);
       break;
     case "Ether":
       evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading);

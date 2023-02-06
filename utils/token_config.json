@@ -4,13 +4,19 @@
     "symbol": "ALGO",
     "name": "Algo",
     "path": "/network/algorand.svg",
-    "wallet": "myalgo.png"
+    "wallet": "myalgo.png",
+    "tokenAddressOnRemoteChain": {
+      "Ether": "0x6D52a10BE00Dc81d352d1Ed85323814c29826665"
+    }
   },
   {
     "decimals": 18,
     "symbol": "ETH",
     "name": "Ether",
     "path": "/network/eth.svg",
-    "wallet": "metamask.svg"
+    "wallet": "metamask.svg",
+    "tokenAddressOnRemoteChain": {
+      "Algo": "86782447"
+    }
   }
 ]

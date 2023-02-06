@@ -15,7 +15,7 @@ import MyAlgoConnect from '@randlabs/myalgo-connect';
 
 import Balance from "./Balance";
 
-import { transferHandle, redeemHandle, algoBalance } from "../bridges/wormhole";
+import { transferHandle, redeemHandle, algoBalance,algoAssetBalance } from "../bridges/wormhole";
 import ERC20ABI from 'erc-20-abi';
 
 export default function Swap() {
@@ -56,9 +56,9 @@ export default function Swap() {
         autoClose: true,
         keepAfterRouteChange: false
     }
-
+    console.log(token0, token1, swapAmount, stage);
     useEffect(() => {
-        if (token0 && token1 && swapAmount) {
+        if (token0 != null && token1 != null && swapAmount) {
             setStage(1);
         }
     }, [token0, token1, swapAmount])
@@ -68,12 +68,18 @@ export default function Swap() {
             case "Algo":
                 const myAlgoConnect = new MyAlgoConnect({ disableLedgerNano: false });
                 const settings = {
-                    shouldSelectOneAccount: false,
-                    openManager: true
+                    shouldSelectOneAccount: true,
+                    openManager: false
                 };
                 const accounts = await myAlgoConnect.connect(settings);
-                const balanceAlgo = await algoBalance(accounts[0].address);
-                console.log(balanceAlgo);
+                let balanceAlgo = 0;
+                if(tokensConfig[token0].name == "Algo"){
+                    //native chaoin
+                    balanceAlgo = await algoBalance(accounts[0].address);
+                }else{
+                    //remote chain
+                    balanceAlgo = await algoAssetBalance(accounts[0].address,tokensConfig[token1].tokenAddressOnRemoteChain[tokensConfig[token0].name]);
+                }
                 if (type == 0) {
                     setToken0Balance(Number(balanceAlgo).toFixed(4));
                     setToken0Addrs(accounts[0].address);
@@ -85,12 +91,20 @@ export default function Swap() {
             case "Ether":
                 const provider = new ethers.providers.Web3Provider(window.ethereum)
                 const account = await provider.send("eth_requestAccounts", []);
-                console.log(account[0]);
                 // console.log(await provider.getBalance(account[0]));
                 // const balance = ethers.utils.formatUnits(await provider.getBalance(account[0]), 18);
-                const Xalgo = new ethers.Contract("0x6D52a10BE00Dc81d352d1Ed85323814c29826665", ERC20ABI, provider);
-                let balance = await Xalgo.balanceOf(account[0]);
-                balance = ethers.utils.formatUnits(balance, 6);
+                let balance = 0;
+                if(tokensConfig[token0].name == "Ether"){
+                    //native 
+                    balance = await provider.getBalance(account[0]);
+                    balance = ethers.utils.formatUnits(balance, 18);
+                }else{
+                    //remote chiain
+                    const Xalgo = new ethers.Contract("0x6D52a10BE00Dc81d352d1Ed85323814c29826665", ERC20ABI, provider);
+                    balance = await Xalgo.balanceOf(account[0]);
+                    balance = ethers.utils.formatUnits(balance, 6);
+                }
+
                 if (type == 0) {
                     setToken0Balance(Number(balance).toFixed(4));
                     setToken0Addrs(account[0]);
@@ -107,12 +121,22 @@ export default function Swap() {
     //token0 change event.
     async function selectToken0ChangeHandle(index) {
         myModal5ClickHandle();
+        if(index == token1){
+            setToken1(null);
+            setToken1Addrs("");
+            setToken1Balance("");
+        }
         setToken0(index);
     }
 
     //token1 change event.
     async function selectToken1ChangeHandle(index) {
         myModal6ClickHandle();
+        if(index == token0){
+            setToken0(null);
+            setToken0Addrs("");
+            setToken0Balance(""); 
+        }
         setToken1(index);
     }
 
@@ -148,9 +172,9 @@ export default function Swap() {
 
     function buttonHtml() {
         if (stage == 1) {
-            return <button onClick={() => transferHandle(setSignedVAA, swapAmount, tokensConfig[token0], token0Addrs, token1Addrs)} className="btn btn-primary w-full normal-case my-5 rounded-xl">transfer</button>
+            return <button onClick={() => transferHandle(setSignedVAA, swapAmount, tokensConfig[token0], token0Addrs, token1Addrs, alertService, setStage, setLoading)} className={`btn btn-primary w-full normal-case my-5 rounded-xl ${loading}`}>transfer</button>
         } else if (stage == 2) {
-            <button onClick={() => redeemHandle(signedVAA, tokensConfig[token1], token0Addrs, token1Addrs)} className="btn btn-primary w-full normal-case my-5 rounded-xl">redeem</button>
+            return <button onClick={() => redeemHandle(signedVAA, tokensConfig[token1], token0Addrs, token1Addrs, alertService, setStage, setLoading)} className={`btn btn-primary w-full normal-case my-5 rounded-xl ${loading}`}>redeem</button>
         } else {
             return <button disabled className="btn btn-primary w-full normal-case my-5 rounded-xl">Input amount</button>
         }

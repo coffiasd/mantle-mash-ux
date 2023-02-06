@@ -119,7 +119,7 @@ function Alert({ id, fade }) {
     <div>
       {alerts.map((alert, index) => (
         <div
-          className="alert alert-warning shadow-lg z-50 fixed m-auto w-auto flex justify-center toast toast-end"
+          className="alert alert-warning shadow-lg z-50 fixed m-auto w-auto flex justify-center toast toast-start"
           key={index}
         >
           <div>
