@@ -14,7 +14,7 @@ const Swap = dynamic(() => import('../components/Swap'), {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-100" data-theme="emerald">
+    <div className="min-h-screen bg-slate-100" data-theme="wireframe">
       <Head>
         <title>Algo Bridge Aggregator</title>
         <meta name="description" content="Algo Bridge Aggregator" />

@@ -29,6 +29,7 @@
 
 .footerHover:hover {
   color: white;
+  cursor: pointer;
 }
 
 .modalSelf {
