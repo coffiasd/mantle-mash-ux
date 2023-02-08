@@ -134,7 +134,7 @@ export async function algoRedeemHandle(signedVAA, token, sender, receiver, alert
   setStage(0);
 }
 
-export async function evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading) {
+export async function evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading, swapAmount, setToken0Balance, setToken1Balance, token0Balance, token1Balance) {
   signedVAA = hexToUint8Array(signedVAA);
   const Provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = Provider.getSigner();
@@ -148,6 +148,9 @@ export async function evmRedeemHandle(signedVAA, token, sender, receiver, alertS
   alertService.info("redeem success");
   setLoading("");
   setStage(0);
+  console.log(token0Balance, token1Balance, swapAmount);
+  setToken0Balance(Number(token0Balance - swapAmount).toFixed(4));
+  setToken1Balance(Number((+token1Balance) + (+swapAmount)).toFixed(4));
   console.log(receipt);
 }
 
@@ -192,7 +195,6 @@ export async function evmTransferHandle(setSignedVAAHex, amount, token, sender, 
 
 export async function transferHandle(setSignedVAA, swapAmount, token, sender, receiver, alertService, setStage, setLoading) {
   alertService.info("starting transfer...");
-  console.log(token.name);
   setLoading("loading");
 
   switch (token.name) {
@@ -207,16 +209,16 @@ export async function transferHandle(setSignedVAA, swapAmount, token, sender, re
   }
 }
 
-export async function redeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading) {
+export async function redeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading, swapAmount, setToken0Balance, setToken1Balance, token0Balance, token1Balance) {
   alertService.info("starting redeem...");
   setLoading("loading");
 
   switch (token.name) {
     case "Algo":
-      algoRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading);
+      algoRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading, swapAmount, setToken0Balance, setToken1Balance, token0Balance, token1Balance);
       break;
     case "Ether":
-      evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading);
+      evmRedeemHandle(signedVAA, token, sender, receiver, alertService, setStage, setLoading, swapAmount, setToken0Balance, setToken1Balance, token0Balance, token1Balance);
       break;
     default:
       break;

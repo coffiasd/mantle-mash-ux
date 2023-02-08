@@ -89,6 +89,26 @@ export default function Swap() {
                 }
                 break;
             case "Ether":
+                // window.ethereum.request({
+                //     method: "wallet_addEthereumChain",
+                //     params: [{
+                //         chainId: "0x89",
+                //         rpcUrls: ["https://rpc-mainnet.matic.network/"],
+                //         chainName: "Matic Mainnet",
+                //         nativeCurrency: {
+                //             name: "MATIC",
+                //             symbol: "MATIC",
+                //             decimals: 18
+                //         },
+                //         blockExplorerUrls: ["https://polygonscan.com/"]
+                //     }]
+                // });
+
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x5' }],
+                });
+
                 const provider = new ethers.providers.Web3Provider(window.ethereum)
                 const account = await provider.send("eth_requestAccounts", []);
                 // console.log(await provider.getBalance(account[0]));
@@ -121,10 +141,10 @@ export default function Swap() {
     //token0 change event.
     async function selectToken0ChangeHandle(index) {
         myModal5ClickHandle();
-        if(index>1){
+        if (index > 1) {
             // not ready tokens
             alertService.info("not ready stay tuned");
-            return 
+            return
         }
         if (index == token1) {
             setToken1(null);
@@ -137,10 +157,10 @@ export default function Swap() {
     //token1 change event.
     async function selectToken1ChangeHandle(index) {
         myModal6ClickHandle();
-        if(index>1){
+        if (index > 1) {
             // not ready tokens
             alertService.info("not ready stay tuned");
-            return 
+            return
         }
         if (index == token0) {
             setToken0(null);
@@ -167,7 +187,7 @@ export default function Swap() {
         }
     }
 
-    const myModal6ClickHandle = () =>{
+    const myModal6ClickHandle = () => {
         if (modalToken1 == "") {
             setModalToken1("modal-open");
         } else {
@@ -175,32 +195,32 @@ export default function Swap() {
         }
     }
 
-    const bridgeChangeHandle = (index)=>{
+    const bridgeChangeHandle = (index) => {
         setDraw(false);
         console.log(index);
-        if(index != 0 ){
+        if (index != 0) {
             alertService.info("not ready stay tuned");
-            return 
+            return
         }
     }
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         var modal5 = document.getElementById('my-modal-5');
         var modal6 = document.getElementById('my-modal-6');
         if (event.target == modal5) {
             myModal5ClickHandle();
-         }
+        }
 
-         if (event.target == modal6) {
+        if (event.target == modal6) {
             myModal6ClickHandle();
-         }
-     }
+        }
+    }
 
     function buttonHtml() {
         if (stage == 1) {
             return <button onClick={() => transferHandle(setSignedVAA, swapAmount, tokensConfig[token0], token0Addrs, token1Addrs, alertService, setStage, setLoading)} className={`btn btn-primary w-full normal-case my-5 rounded-xl ${loading}`}>transfer</button>
         } else if (stage == 2) {
-            return <button onClick={() => redeemHandle(signedVAA, tokensConfig[token1], token0Addrs, token1Addrs, alertService, setStage, setLoading)} className={`btn btn-primary w-full normal-case my-5 rounded-xl ${loading}`}>redeem</button>
+            return <button onClick={() => redeemHandle(signedVAA, tokensConfig[token1], token0Addrs, token1Addrs, alertService, setStage, setLoading, swapAmount, setToken0Balance, setToken1Balance, token0Balance, token1Balance)} className={`btn btn-primary w-full normal-case my-5 rounded-xl ${loading}`}>redeem</button>
         } else {
             return <button disabled className="btn btn-primary w-full normal-case my-5 rounded-xl">Input amount</button>
         }
@@ -218,7 +238,7 @@ export default function Swap() {
                         {tokensConfig.map((item, key) => (
                             <div className="flex flex-row cursor-pointer hover:bg-warning rounded-2xl p-1" key={key} onClick={() => selectToken0ChangeHandle(key)}>
                                 <div>
-                                    <Image src={item.path} width={25} height={25} />
+                                    <Image alt="" src={item.path} width={25} height={25} />
                                 </div>
                                 <div className="ml-3 text-base">{item.name}</div>
                             </div>
@@ -235,7 +255,7 @@ export default function Swap() {
                         {tokensConfig.map((item, key) => (
                             <div className="flex flex-row h-10 cursor-pointer hover:bg-warning p-2 rounded-2xl" key={key} onClick={() => selectToken1ChangeHandle(key)}>
                                 <div className="w-1/12 align-middle">
-                                    <Image src={item.path} width={25} height={25} />
+                                    <Image alt="" src={item.path} width={25} height={25} />
                                 </div>
                                 <div className="w-9/12 mb-4">
                                     <div>{item.name}</div>
@@ -249,7 +269,7 @@ export default function Swap() {
             <div className="w-56 m-auto mt-20 h-20 p-2">
                 <div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl cursor-pointer" onClick={() => { setDraw(!draw) }}>
                     <div className="flex ml-1"
-                    ><Image src="/network/wormhole.png" width={24} height={20}></Image>
+                    ><Image alt="" src="/network/wormhole.png" width={24} height={20}></Image>
                     </div>
                     <div className="flex-auto text-center mx-1">{currentBridge}</div>
                     <div className="flex mt-1 mr-2"><BiChevronDown size="1rem" />
@@ -257,7 +277,7 @@ export default function Swap() {
                 </div>
                 {draw && <ul className="menu bg-base-100 w-52 p-2 rounded-box mt-1 fixed">
                     {bridgeConfig.map((item, key) => (
-                        <li onClick={(event) => { bridgeChangeHandle(key) }}><a><Image src={item.icon} width={20} height={20}></Image>{item.name}</a></li>
+                        <li key={key} onClick={(event) => { bridgeChangeHandle(key) }}><a><Image alt="" src={item.icon} width={20} height={20}></Image>{item.name}</a></li>
                     ))}
                 </ul>}
             </div>
@@ -280,7 +300,7 @@ export default function Swap() {
                             <div className="w-1/2">
                                 {token0 != null ? (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl cursor-pointer" onClick={myModal5ClickHandle}>
                                     <div className="flex"
-                                    ><Image src={tokensConfig[token0].path} width={20} height={20}></Image>
+                                    ><Image alt="" src={tokensConfig[token0].path} width={20} height={20}></Image>
                                     </div>
                                     <div className="flex-auto text-center mx-1">{tokensConfig[token0].name}</div>
                                     <div className="flex"><BiChevronDown size="1rem" />
@@ -294,7 +314,7 @@ export default function Swap() {
                             <div className="w-1/2">
                                 {token0 != null ? (<div className="p-2 flex flex-row border-solid border-2 rounded-2xl cursor-pointer" onClick={() => connectWallet(tokensConfig[token0].name, 0)}>
                                     <div className="flex w-6"
-                                    ><Image src={"/wallet/" + tokensConfig[token0].wallet} width={20} height={20}></Image>
+                                    ><Image alt="" src={"/wallet/" + tokensConfig[token0].wallet} width={20} height={20}></Image>
                                     </div>
                                     <div className="flex text-center mx-1">Wallet</div>
                                     <div className="flex"><BiChevronDown size="1rem" />
@@ -319,7 +339,7 @@ export default function Swap() {
                             <div className="w-1/2">
                                 {token1 != null ? (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl cursor-pointer" onClick={myModal6ClickHandle}>
                                     <div className="flex"
-                                    ><Image src={tokensConfig[token1].path} width={20} height={20}></Image>
+                                    ><Image alt="" src={tokensConfig[token1].path} width={20} height={20}></Image>
                                     </div>
                                     <div className="flex-auto text-center mx-1">{tokensConfig[token1].name}</div>
                                     <div className="flex"><BiChevronDown size="1rem" />
@@ -333,7 +353,7 @@ export default function Swap() {
                             <div className="w-1/2">
                                 {token1 != null ? (<div className="w-auto p-2 flex flex-row border-solid border-2 rounded-2xl cursor-pointer" onClick={() => connectWallet(tokensConfig[token1].name, 1)}>
                                     <div className="flex w-6"
-                                    ><Image src={"/wallet/" + tokensConfig[token1].wallet} width={20} height={20}></Image>
+                                    ><Image alt="" src={"/wallet/" + tokensConfig[token1].wallet} width={20} height={20}></Image>
                                     </div>
                                     <div className="flex-auto text-center mx-1">Connect</div>
                                     <div className="flex"><BiChevronDown size="1rem" />
