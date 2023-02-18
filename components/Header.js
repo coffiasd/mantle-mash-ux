@@ -1,28 +1,48 @@
-import { FaBitcoin, FaTwitter, FaGithub, FaYoutube, FaAngleDown } from "react-icons/fa";
+import { FaTwitter, FaGithub, FaYoutube } from "react-icons/fa";
 import styles from '../styles/Home.module.css';
 import Image from 'next/image'
-import algoIcon from "cryptocurrency-icons/128/color/algo.png";
-import algoSmallIcon from "cryptocurrency-icons/svg/color/algo.svg";
+import {
+    useConnectModal,
+    useAccountModal,
+    useChainModal,
+} from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi'
+import Blockies from 'react-blockies';
 
 export default function Header() {
-
-    const hideAddress = (address) => {
-        return address.substring(0, 4) + "...." + address.slice(-4)
-    }
+    const { openConnectModal } = useConnectModal();
+    const { openAccountModal } = useAccountModal();
+    const { openChainModal } = useChainModal();
+    const { address, isConnected } = useAccount();
 
     return (
         <div className="navbar text-neutral-content border-solid border-b-2 bg-base-content">
             <div className="flex-1 ml-3">
                 <ul className='flex flex-row justify-between gap-6'>
-                    <li><a className={styles.logo} href="#"><Image src={algoIcon} width={30} height={30} /></a></li>
+                    <li><a className={styles.logo} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></a></li>
                     <li><a className={styles.leftToRight} href="https://twitter.com/coffiasse"><FaTwitter size="1.2rem" className='m-1' />twitter</a></li>
                     <li><a className={styles.leftToRight} href="https://github.com/coffiasd"><FaGithub size="1.2rem" className='m-1' />github</a></li>
                     <li><a className={styles.leftToRight} href="https://www.youtube.com/channel/UCqrS4kOJuUor52EYROcfXuw"><FaYoutube size="1.2rem" className='m-1' />youtube</a></li>
                 </ul>
             </div>
 
-            <div className="navbar-end">
+            <div className="flex-none">
+                <div className="form-control">
+                    <div className="input-group">
+                        <input type="text" placeholder="input an address" className="input input-bordered input-group-lg" />
+                        <button className="btn btn-square">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <div className="navbar-end">
+                {isConnected ?
+                    (<><button className="btn btn-sm btn-primary ml-3 normal-case" onClick={openAccountModal}>Profile</button><button className="btn btn-sm btn-info mx-3 normal-case " onClick={openChainModal}>Chain</button><Blockies color='#dfe' bgcolor='#aaa' seed={address} size={10} scale={3} /></>)
+                    :
+                    (<button className="btn btn-sm btn-warning ml-3 normal-case" onClick={openConnectModal}>connect wallet</button>)
+                }
             </div>
         </div >
     )
