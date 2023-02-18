@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
+import { Bars } from 'react-loading-icons'
+import { BottomScrollListener } from 'react-bottom-scroll-listener';
 
 export default function Transactions() {
+    const [loading, setLoading] = useState(false);
     const [transactions, setTransactions] = useState([]);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetch(`https://explorer.testnet.mantle.xyz/api?module=account&action=txlist&address=0x69C2f5947A2FF61B8814A74940470C4fe6AB9931`)
@@ -23,6 +27,10 @@ export default function Transactions() {
 
     const calValue = (v) => {
         return parseInt(ethers.utils.formatEther(v));
+    }
+
+    const handleScroll = (e) => {
+        setLoading(true);
     }
 
     const calTime = (t) => {
@@ -48,14 +56,10 @@ export default function Transactions() {
     return (
         <div className="w-5/6 m-auto rounded-2xl bg-secondary my-6">
 
+            <BottomScrollListener onBottom={handleScroll} />
+
             <div className="p-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                 <time className="text-lg font-semibold text-gray-900 dark:text-white">Transaction Timeline</time>
-
-                <div className="btn-group grid grid-cols-2 w-1/4 ">
-                    <button className="btn btn-outline">Previous page</button>
-                    <button className="btn btn-outline">Next</button>
-                </div>
-
 
                 <ol className="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
                     {transactions.map((item, key) => (
@@ -113,8 +117,15 @@ export default function Transactions() {
                     ))}
 
                 </ol>
+                {loading && (<div className='flex flex-col'>
+                    <div className='flex m-auto'>
+                        <Bars stroke="transparent" fill="#06bcee" height='3em' />
+                    </div>
+                    <div className='flex m-auto'>
+                        loading...
+                    </div>
+                </div>)}
             </div>
-
         </div>
     )
 }
