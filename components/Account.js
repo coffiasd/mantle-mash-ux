@@ -1,13 +1,22 @@
 import { useAccount } from 'wagmi'
 import Blockies from 'react-blockies';
 
-export default function Account() {
 
+export default function Account() {
     const { address, isConnected } = useAccount()
+
+
+    //fetching user profile.
+
+    //?module=account&action=balance&address={addressHash}
+    //?module=account&action=tokentx&address={addressHash}
+    //?module=account&action=getminedblocks&address={addressHash}
+    //?module=account&action=tokenlist&address={addressHash}
+
 
     return (
         <>
-            <div className="w-full lg:w-10/12 px-4 mx-auto">
+            <div className="w-full lg:w-5/6 mx-auto">
                 <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
                     <div className="px-6">
                         <div className="flex flex-wrap justify-center">
@@ -15,9 +24,9 @@ export default function Account() {
                                 <div className="flex relative mt-3">
                                     <Blockies color='#dfe' bgcolor='#aaa' seed={address} size={30} scale={3} />
                                 </div>
+
                                 <div className='flex'>
                                     <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
-                                        {/* {address} */}
                                     </h3>
                                 </div>
 
@@ -49,10 +58,6 @@ export default function Account() {
                             <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
                                 {address}
                             </h3>
-                            <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                                <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                                Los Angeles, California
-                            </div>
                             <div className="mb-2 text-blueGray-600 mt-10">
                                 <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
                                 Solution Manager - Creative Tim Officer

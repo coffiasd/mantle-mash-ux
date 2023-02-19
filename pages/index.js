@@ -5,9 +5,13 @@ import React from "react";
 import { Alert } from '../components/alert.jsx';
 import Block from '../components/Block';
 import Chart from '../components/Chart';
-import Transactions from '../components/Transaction';
+// import Transactions from '../components/Transaction';
 
 const Header = dynamic(() => import('../components/Header'), {
+  ssr: false,
+})
+
+const Transactions = dynamic(() => import('../components/Transaction'), {
   ssr: false,
 })
 
