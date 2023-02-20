@@ -1,4 +1,4 @@
-# Algo-bridge-aggregator
+# Mantle Mash UX
 
 ## Links
 
@@ -7,14 +7,21 @@
 
 ## Overview
 
-![alt ""](/public/overview.png)
-![alt ""](/public/account.png)
 This is a project build for gitcoin mantle mash hackathon。I build a front-end page with nextjs and daisyUI to display on-chain data。User have to login using like metamask wallet to show his/her transaction list。When user scroll to the end of the page we gonna request some more transaction information until the end of his/her transaction。What's more ? we track the coin price and marketcap within month by line chart。And the stat of the following index:
 
 - ethsupply
 - coinsupply
-- coinprice
+- currentprice
 - totalfee
+
+We use ![ethereum blockies](https://github.com/ethereum/blockies) to generate identicons for Ethereum addresses。So that user could more easily check if an address he wants to interact with is the correct one。
+For connect wallet we use rainbow kit and wagmi hook to make the user interact with metamask wallet process more user-friendly。
+
+![alt ""](/public/overview.png)
+
+![alt ""](/public/account.png)
+
+![alt ""](/public/wallet.png)
 
 ### document tree
 
@@ -61,6 +68,7 @@ npm run build
 
 ## Reference
 
+- [1] mantle-api <https://explorer.testnet.mantle.xyz/>
 - [1] tailwindcss <https://tailwindcss.com/>
 - [2] dasyUi <https://daisyui.com/>
 - [3] next.js <https://nextjs.org/>
