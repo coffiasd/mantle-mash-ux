@@ -14,7 +14,7 @@ This is a project build for gitcoin mantle mash hackathon。I build a front-end 
 - currentprice
 - totalfee
 
-We use ![ethereum blockies](https://github.com/ethereum/blockies) to generate identicons for Ethereum addresses。So that user could more easily check if an address he wants to interact with is the correct one。
+We use [ethereum blockies](https://github.com/ethereum/blockies) to generate identicons for Ethereum addresses。So that user could more easily check if an address he wants to interact with is the correct one。
 For connect wallet we use rainbow kit and wagmi hook to make the user interact with metamask wallet process more user-friendly。
 
 ![alt ""](/public/overview.png)
@@ -74,6 +74,7 @@ npm run build
 - [3] next.js <https://nextjs.org/>
 - [4] ether.js <https://docs.ethers.org/v6/>
 - [5] wagmi <https://wagmi.sh/>
+- [6] ethereum-blockies <https://www.npmjs.com/package/ethereum-blockies>
 
 ## License
 
