@@ -8,6 +8,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useRouter } from 'next/router'
+import Link from 'next/link';
 
 export default function Header() {
     const router = useRouter()
@@ -22,10 +23,10 @@ export default function Header() {
         <div className="navbar text-neutral-content border-solid border-b-2 bg-base-content">
             <div className="flex-1 ml-3">
                 <ul className='flex flex-row justify-between gap-6'>
-                    <li><a className={styles.logo} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></a></li>
-                    <li><a className={styles.leftToRight} href="https://twitter.com/coffiasse"><FaTwitter size="1.2rem" className='m-1' />twitter</a></li>
-                    <li><a className={styles.leftToRight} href="https://github.com/coffiasd"><FaGithub size="1.2rem" className='m-1' />github</a></li>
-                    <li><a className={styles.leftToRight} href="https://www.youtube.com/channel/UCqrS4kOJuUor52EYROcfXuw"><FaYoutube size="1.2rem" className='m-1' />youtube</a></li>
+                    <li><Link className={styles.logo} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></Link></li>
+                    <li><Link className={styles.leftToRight} href="https://twitter.com/coffiasse"><FaTwitter size="1.2rem" className='m-1' />twitter</Link></li>
+                    <li><Link className={styles.leftToRight} href="https://github.com/coffiasd"><FaGithub size="1.2rem" className='m-1' />github</Link></li>
+                    <li><Link className={styles.leftToRight} href="https://www.youtube.com/channel/UCqrS4kOJuUor52EYROcfXuw"><FaYoutube size="1.2rem" className='m-1' />youtube</Link></li>
                 </ul>
             </div>
 

@@ -115,7 +115,7 @@ export default function TransactionInfo() {
                     <div className="flex">{info && info.timeStamp}</div>
                 </div>
 
-                <div className="divider">I'm a lonely divider</div>
+                <div className="divider">Im a lonely divider</div>
 
                 <div className="flex flex-row my-3">
                     <div className="flex w-4 my-auto">
@@ -151,7 +151,7 @@ export default function TransactionInfo() {
                     </div>
                 </div>
 
-                <div className="divider">I'm a lonely divider</div>
+                <div className="divider">Im a lonely divider</div>
 
 
                 <div className="flex flex-row my-3">

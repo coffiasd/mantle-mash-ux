@@ -177,7 +177,7 @@ export default function Transactions() {
                 </div >)
             }
 
-            {isend && isConnected && <div className="divider">I'm a the end of the world!!</div>}
+            {isend && isConnected && <div className="divider">Im a the end of the world</div>}
         </div >
     )
 }
