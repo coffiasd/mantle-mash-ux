@@ -6,7 +6,7 @@ import {
     useAccountModal,
     useChainModal,
 } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useRouter } from 'next/router'
 
 export default function Header() {
@@ -14,7 +14,11 @@ export default function Header() {
     const { openConnectModal } = useConnectModal();
     const { openAccountModal } = useAccountModal();
     const { openChainModal } = useChainModal();
-    const { address, isConnected } = useAccount();
+    const { isConnected } = useAccount();
+    const { switchNetwork } = useSwitchNetwork()
+    const { chain } = useNetwork();
+
+    console.log(chain.id);
 
     return (
         <div className="navbar text-neutral-content border-solid border-b-2 bg-base-content">
@@ -39,10 +43,12 @@ export default function Header() {
             </div>
 
             <div className="navbar-end">
-                {isConnected ?
+                {chain.id != 5001 && <button className="btn btn-sm btn-warning ml-3 normal-case" onClick={() => switchNetwork(5001)}>switch net</button>}
+
+                {!isConnected && (<button className="btn btn-sm btn-warning ml-3 normal-case" onClick={openConnectModal}>connect wallet</button>)}
+
+                {isConnected && chain.id == 5001 &&
                     (<><button className="btn btn-sm btn-primary ml-3 normal-case" onClick={openAccountModal}>Profile</button><button className="btn btn-sm btn-primary ml-3 normal-case " onClick={openChainModal}>Chain</button><button className="btn btn-sm btn-primary mx-3 normal-case " onClick={() => { router.push('/profile') }}>Info</button></>)
-                    :
-                    (<button className="btn btn-sm btn-warning ml-3 normal-case" onClick={openConnectModal}>connect wallet</button>)
                 }
             </div>
         </div >

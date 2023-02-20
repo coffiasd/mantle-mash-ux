@@ -78,7 +78,7 @@ export default function Transactions() {
                 return parseInt(min / 60) + ' hours ago';
             } else {
                 //days
-                return parseInt(min / 3600) + ' days ago';
+                return (parseInt(min / 3600) + 1) + ' days ago';
             }
         }
     }
@@ -166,7 +166,7 @@ export default function Transactions() {
                 </div >)
             }
 
-            {isend && <div className="divider">I'm a the end of the world!!</div>}
+            {isend && isConnected && <div className="divider">I'm a the end of the world!!</div>}
         </div >
     )
 }

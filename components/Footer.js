@@ -1,4 +1,5 @@
 import styles from '../styles/Home.module.css';
+import Image from 'next/image';
 
 export default function Footer() {
     return (
@@ -16,6 +17,13 @@ export default function Footer() {
                 <a className={styles.footerHover}>Contact</a>
                 <a className={styles.footerHover}>Jobs</a>
                 <a className={styles.footerHover}>Press kit</a>
+            </div>
+            <div>
+                <span className="footer-title text-black">Wellet</span>
+                <div className='flex flex-row cursor-pointer'>
+                    <div className='my-auto'><Image src="/mm.svg" width={30} height={30} /></div>
+                    <div className='my-auto'>Add MetaMask Testnet</div>
+                </div>
             </div>
             <div>
                 <span className="footer-title">Social</span>

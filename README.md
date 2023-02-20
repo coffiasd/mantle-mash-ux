@@ -2,43 +2,40 @@
 
 ## Links
 
-- dapp demo : <https://algo-bridge-aggregator.vercel.app/>
-- youtube: <https://youtu.be/nJyiXdsyfOs>
+- dapp demo :
+- youtube:
 
 ## Overview
 
-This is Greenhouse Hacks 3 project。 We build a front-end UI to help user transfer their assets to wherever network they want。 This project is built with wormhole bridge SDK, we originally planned to gather glitter as well。 Unfortunately, glitter's front-end sdk is not ready at this stage。 By the way, I will explain how to assemble a new bridge SDK for this project below
+![alt ""](/public/overview.png)
+![alt ""](/public/account.png)
+This is a project build for gitcoin mantle mash hackathon。I build a front-end page with nextjs and daisyUI to display on-chain data。User have to login using like metamask wallet to show his/her transaction list。When user scroll to the end of the page we gonna request some more transaction information until the end of his/her transaction。What's more ? we track the coin price and marketcap within month by line chart。And the stat of the following index:
 
-### how to add a new bridge SDK ?
-
-- add new bridge sdk config in "utils/bridge_config"
-  <img src="/public/demo/bridges.png" width=70% height=70%>
-- add transfer && redeem with new SDK in "bridges"
-  ![alt ""](/public/demo/SDK.png)
+- ethsupply
+- coinsupply
+- coinprice
+- totalfee
 
 ### document tree
 
 ```
-├── LICENSE
+mantle-mash-ux
+├── LICENSE             (LICENSE file)
 ├── README.md
-├── bridges (add some new SDKs here)
-├── components (react components)
-├── next.config.js
+├── components          (react components)
+├── next.config.js      (nextjs config file)
+├── node_modules
 ├── package-lock.json
 ├── package.json
-├── pages
+├── pages                (pages)
 ├── postcss.config.js
 ├── public
 ├── services
-├── styles (global styles)
-├── tailwind.config.js
-├── utils (token && bridge config)
+├── styles
+├── tailwind.config.js  (tailwindcss config file)
 └── yarn.lock
+
 ```
-
-## Flowchart
-
-![alt ""](/public/demo/flowchart.png)
 
 ## Install
 
@@ -60,8 +57,7 @@ npm run build
 - dasyUi
 - next.js
 - ether.js
-- wormhole
-- myalgo
+- wagmi
 
 ## Reference
 
@@ -69,8 +65,7 @@ npm run build
 - [2] dasyUi <https://daisyui.com/>
 - [3] next.js <https://nextjs.org/>
 - [4] ether.js <https://docs.ethers.org/v6/>
-- [5] wormhole <https://wormhole.com/>
-- [6] myalgo <https://wallet.myalgo.com/>
+- [5] wagmi <https://wagmi.sh/>
 
 ## License
 

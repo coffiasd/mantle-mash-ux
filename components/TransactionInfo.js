@@ -19,7 +19,6 @@ export default function TransactionInfo() {
             fetch(`https://explorer.testnet.mantle.xyz/api?module=transaction&action=gettxinfo&txhash=` + txhash)
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data);
                     if (data.message == "OK") {
                         setInfo(data.result);
                     }

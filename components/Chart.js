@@ -11,7 +11,6 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -21,8 +20,6 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
-
 
 export default function Chart() {
 
@@ -124,13 +121,13 @@ export default function Chart() {
     return (
         <div className="w-5/6 m-auto rounded-2xl bg-base-100 h-auto mt-6">
 
-            <div className="flex flex-row">
+            <div className="flex lg:flex-row md:flex-col">
 
-                <div className="w-1/2 p-6">
+                <div className="lg:w-1/2 p-6 md:w-full">
                     <Line options={options} data={data} />
                 </div>
 
-                <div className="w-1/2 p-6">
+                <div className="lg:w-1/2 p-6 md:w-full">
                     <Line options={options2} data={data2} />
                 </div>
 

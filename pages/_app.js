@@ -10,25 +10,22 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 
-// const bssctestChain = {
-//   id: 97,
-//   name: 'BSC Testnet',
-//   network: 'BSC Testnet',
-//   nativeCurrency: {
-//     decimals: 18,
-//     name: 'tBNB',
-//     symbol: 'tBNB',
-//   },
-//   rpcUrls: {
-//     default: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-//   },
-//   blockExplorers: {
-//     default: { name: 'SnowTrace', url: 'https://testnet.bscscan.com' },
-//   },
-//   testnet: true,
-// }
+const mantlectestChain = {
+  id: 5001,
+  name: 'Mantle Testnet',
+  network: 'Mantle Testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'BIT',
+    symbol: 'BIT',
+  },
+  rpcUrls: {
+    default: 'https://explorer.testnet.mantle.xyz',
+  },
+  testnet: true,
+}
 
-const { chains, provider } = configureChains([chain.goerli, chain.polygonMumbai, chain.localhost], [publicProvider()])
+const { chains, provider } = configureChains([mantlectestChain, chain.goerli, chain.localhost], [publicProvider()])
 const { connectors } = getDefaultWallets({
   appName: 'My RainbowKit App',
   chains
