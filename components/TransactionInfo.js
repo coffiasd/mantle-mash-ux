@@ -2,13 +2,38 @@ import { TiInfo } from "react-icons/ti";
 import { IoIosCopy } from "react-icons/io";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 export default function TransactionInfo() {
     const router = useRouter();
     const { txhash } = router.query;
     const [info, setInfo] = useState(null);
     const [show, setShow] = useState(false);
-    //?module=transaction&action=gettxinfo&txhash={transactionHash}
+    const [shake, setShake] = useState(false);
+    const [shake1, setShake1] = useState(false);
+    const [shake2, setShake2] = useState(false);
+
+    const animate = () => {
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+    }
+
+    const animate1 = () => {
+        setShake1(true);
+        setTimeout(() => setShake1(false), 500);
+    }
+
+    const animate2 = () => {
+        setShake2(true);
+        setTimeout(() => setShake2(false), 500);
+    }
+
+    const hideAddress = (input) => {
+        if (input.length < 100) {
+            return input;
+        }
+        return input.substring(0, 50) + "...." + input.slice(-50)
+    }
 
     useEffect(() => {
         if (!txhash) {
@@ -48,8 +73,10 @@ export default function TransactionInfo() {
                     <div className="flex w-40">Transaction Hash</div>
                     <div className="flex">{txhash}</div>
                     <div className="flex my-auto cursor-pointer">
-                        <div className="tooltip tooltip-secondary" data-tip="click to copy">
-                            <IoIosCopy />
+                        <div onClick={animate} className={`tooltip tooltip-secondary ${shake ? "shake" : ""}`} data-tip="click to copy">
+                            <CopyToClipboard text={txhash}>
+                                <IoIosCopy />
+                            </CopyToClipboard>
                         </div>
                     </div>
                 </div>
@@ -99,8 +126,10 @@ export default function TransactionInfo() {
                     <div className="flex w-40">From</div>
                     <div className="flex">{info && info.from}</div>
                     <div className="flex my-auto cursor-pointer">
-                        <div className="tooltip tooltip-secondary" data-tip="click to copy">
-                            <IoIosCopy />
+                        <div onClick={animate1} className={`tooltip tooltip-secondary ${shake1 ? "shake" : ""}`} data-tip="click to copy">
+                            <CopyToClipboard text={info && info.from}>
+                                <IoIosCopy />
+                            </CopyToClipboard>
                         </div>
                     </div>
                 </div>
@@ -114,8 +143,10 @@ export default function TransactionInfo() {
                     <div className="flex w-40">To</div>
                     <div className="flex">{info && info.to}</div>
                     <div className="flex my-auto cursor-pointer">
-                        <div className="tooltip tooltip-secondary" data-tip="click to copy">
-                            <IoIosCopy />
+                        <div onClick={animate2} className={`tooltip tooltip-secondary ${shake2 ? "shake" : ""}`} data-tip="click to copy">
+                            <CopyToClipboard text={info && info.to}>
+                                <IoIosCopy />
+                            </CopyToClipboard>
                         </div>
                     </div>
                 </div>
@@ -162,7 +193,7 @@ export default function TransactionInfo() {
                     <div className="flex w-40 my-auto">Input:</div>
                     <div className="flex w-5/6 text-xs rounded-md border-2 p-2">
                         <p className="w-full break-words text-second">
-                            0xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece900000000xcbd4ece90000000
+                            {info && hideAddress(info.input)}
                         </p>
                     </div>
                 </div>

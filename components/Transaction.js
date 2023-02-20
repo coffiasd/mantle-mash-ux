@@ -5,24 +5,31 @@ import { Bars } from 'react-loading-icons'
 import { BottomScrollListener } from 'react-bottom-scroll-listener';
 import { TiInfo } from "react-icons/ti";
 import { useAccount } from 'wagmi'
-import { useRouter } from 'next/router'
+import {
+    useConnectModal,
+} from '@rainbow-me/rainbowkit';
 
 export default function Transactions() {
     const [loading, setLoading] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [page, setPage] = useState(1);
     const [isend, setIsend] = useState(false);
+    const { openConnectModal } = useConnectModal();
 
     let { address, isConnected } = useAccount()
 
     //testnet set a specicfic address.
-    address = "0x69C2f5947A2FF61B8814A74940470C4fe6AB9931";
+    if (address == "0xB315fBA4A6514100BdceA5C438E89dd9dd9F216F") {
+        address = "0x69C2f5947A2FF61B8814A74940470C4fe6AB9931";
+    }
 
     useEffect(() => {
-        fetch(`https://explorer.testnet.mantle.xyz/api?module=account&action=txlist&address=` + address)
+        setLoading(true);
+        fetch(`https://explorer.testnet.mantle.xyz/api?module=account&action=txlist&address=` + address + "&offset=10&page=1")
             .then((res) => res.json())
             .then((data) => {
                 setTransactions(data.result);
+                setLoading(false);
             })
     }, [address])
 
@@ -38,13 +45,17 @@ export default function Transactions() {
         return parseInt(ethers.utils.formatEther(v));
     }
 
+    const isMinter = (address) => {
+        return address == "0x0000000000000000000000000000000000000000"
+    }
+
     const handleScroll = (e) => {
-        if (isend) {
+        if (isend || loading) {
             return
         }
         setLoading(true);
         //fetching data...
-        fetch(`https://explorer.testnet.mantle.xyz/api?module=account&action=txlist&address=` + address + `&page` + page)
+        fetch(`https://explorer.testnet.mantle.xyz/api?module=account&action=txlist&address=` + address + `&page=` + (page + 1) + "&offset=10")
             .then((res) => res.json())
             .then((data) => {
                 let currentPage = page + 1;
@@ -53,12 +64,11 @@ export default function Transactions() {
                 setTransactions(tmp);
                 setPage(currentPage);
                 //test set end.
-                console.log("currentPage:", currentPage);
-                if (currentPage == 3) {
+                console.log("currentPage:", data);
+                if (data.result.length == 0 || data.result.length < 10 || currentPage >= 10) {
                     setIsend(true);
                 }
             }).finally(() => {
-                console.log("currentPage:", page);
                 setLoading(false);
             })
     }
@@ -96,7 +106,7 @@ export default function Transactions() {
                         </div>
                     </div>
                     <div className="flex w-40">Private Note:</div>
-                    <div className="flex">To access the Private Note feature, you must be <span className='text-cyan-600 mx-2 cursor-pointer'>Logged in</span></div>
+                    <div className="flex">To access the Private Note feature, you must be <span className='text-cyan-600 mx-2 cursor-pointer' onClick={openConnectModal}>Logged in</span></div>
                 </div>
             </div>)
                 : (<div className="p-5 border border-gray-100 rounded-lg bg-gray-50">
@@ -107,9 +117,11 @@ export default function Transactions() {
                             <li key={key}>
                                 <div className="items-center flex flex-row p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700 h-24">
                                     <div className="flex-1">
-                                        <div className="badge badge-warning  gap-2">
-                                            info
-                                        </div>
+                                        {item.from && isMinter(item.from) ? (<div className="badge badge-warning gap-2">
+                                            Minting
+                                        </div>) : (<div className="badge badge-warning gap-2">
+                                            Transaction
+                                        </div>)}
                                     </div>
                                     <div className="flex-1">
                                         from
@@ -117,7 +129,6 @@ export default function Transactions() {
                                             <Blockies color='#dfe' bgcolor='#aaa' seed={item.from} size={15} scale={3} />
                                         </div>
                                     </div>
-
 
                                     <div className="flex-1">
                                         to

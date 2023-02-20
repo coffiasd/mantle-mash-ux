@@ -1,6 +1,9 @@
 import CountUp from 'react-countup';
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
+import Image from 'next/image';
+import { IoLogoUsd } from "react-icons/io";
+import { FaBitcoin } from "react-icons/fa";
 
 function Block() {
     const [ethsupply, setEthsupply] = useState(0);
@@ -49,7 +52,7 @@ function Block() {
             <div className="stats w-full rounded-2xl h-auto text-center lg:stats-horizontal md:stats-vertical">
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <Image src="/ethereum-original.svg" width={30} height={30} />
                     </div>
                     <div className="stat-title">ethsupply</div>
                     <div className="stat-value">
@@ -66,7 +69,7 @@ function Block() {
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <Image src="/bitdao.png" width={30} height={30} />
                     </div>
                     <div className="stat-title">coinsupply</div>
                     <div className="stat-value">
@@ -84,7 +87,7 @@ function Block() {
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <IoLogoUsd size="2rem" />
                     </div>
                     <div className="stat-title">coinprice</div>
                     <div className="stat-value">
@@ -103,7 +106,7 @@ function Block() {
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <FaBitcoin size="2rem" />
                     </div>
                     <div className="stat-title">totalfees</div>
                     <div className="stat-value">

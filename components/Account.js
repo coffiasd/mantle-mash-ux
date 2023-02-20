@@ -15,7 +15,9 @@ export default function Account() {
     //?module=account&action=tokentx&address={addressHash}
     //?module=account&action=getminedblocks&address={addressHash}
     //?module=account&action=tokenlist&address={addressHash}
-    address = "0x69C2f5947A2FF61B8814A74940470C4fe6AB9931";
+    if (address == "0xB315fBA4A6514100BdceA5C438E89dd9dd9F216F") {
+        address = "0x69C2f5947A2FF61B8814A74940470C4fe6AB9931";
+    }
 
     useEffect(() => {
         if (!address) {

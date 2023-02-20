@@ -19,8 +19,6 @@ For connect wallet we use rainbow kit and wagmi hook to make the user interact w
 
 ![alt ""](/public/overview.png)
 
-![alt ""](/public/account.png)
-
 ![alt ""](/public/wallet.png)
 
 ### document tree
@@ -75,6 +73,7 @@ npm run build
 - [4] ether.js <https://docs.ethers.org/v6/>
 - [5] wagmi <https://wagmi.sh/>
 - [6] ethereum-blockies <https://www.npmjs.com/package/ethereum-blockies>
+- [7] rainbowKit <https://www.rainbowkit.com/>
 
 ## License
 
