@@ -3,11 +3,11 @@
 ## Links
 
 - dapp demo : <https://mantle-mash-ux.vercel.app/>
-- youtube:
+- youtube: <https://youtu.be/JNReJNJPkyc>
 
 ## Overview
 
-This is a project build for gitcoin mantle mash hackathon。I build a front-end page with nextjs and daisyUI to display on-chain data。User have to login using like metamask wallet to show his/her transaction list。When user scroll to the end of the page we gonna request some more transaction information until the end of his/her transaction。What's more ? we track the coin price and marketcap within month by line chart。And the stat of the following index:
+This is a project built for gitcoin mantle mash hackathon。I build a front-end page with nextjs and daisyUI to display on-chain data。User have to login using metamask wallet to show his/her transaction list。When the user scrolls to the end of the page we gonna request some more transaction information until the end of his/her transaction。What's more ? we track the coin price and marketcap within month by line chart。And the stat of the following index:
 
 - ethsupply
 - coinsupply
