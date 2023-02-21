@@ -29,10 +29,10 @@ export default function TransactionInfo() {
     }
 
     const hideAddress = (input) => {
-        if (input.length < 100) {
+        if (input.length < 200) {
             return input;
         }
-        return input.substring(0, 50) + "...." + input.slice(-50)
+        return input.substring(0, 100) + "...." + input.slice(-100)
     }
 
     useEffect(() => {

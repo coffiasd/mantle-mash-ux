@@ -24,7 +24,7 @@ export default function Header() {
             <div className="flex-1 ml-3">
                 <ul className='flex flex-row justify-between gap-6'>
                     <li>
-                        <Link className={styles.logo} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></Link>
+                        <Link className={`${styles.logo} cursor-pointer`} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></Link>
                     </li>
                     <li>
                         <Link href="https://twitter.com/coffiasse">

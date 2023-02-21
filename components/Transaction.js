@@ -113,7 +113,7 @@ export default function Transactions() {
                     <div className="text-lg text-gray-900 dark:text-white">Transaction Timeline</div>
 
                     <ol className="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
-                        {transactions.map((item, key) => (
+                        {transactions && transactions.map((item, key) => (
                             <li key={key}>
                                 <div className="items-center flex flex-row p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700 h-24">
                                     <div className="flex-1">
