@@ -23,8 +23,8 @@ export default function Header() {
         <div className="navbar text-neutral-content border-solid border-b-2 bg-base-content">
             <div className="flex-1 ml-3">
                 <ul className='flex flex-row justify-between gap-6'>
-                    <li>
-                        <Link className={`${styles.logo} cursor-pointer`} href="/"><Image src="/logo-lockup.svg" width={100} height={30} /></Link>
+                    <li className="cursor-pointer">
+                        <Link className={styles.logo} href="/"><Image src="/logo-lockup.svg" width={100} height={35} /></Link>
                     </li>
                     <li>
                         <Link href="https://twitter.com/coffiasse">
